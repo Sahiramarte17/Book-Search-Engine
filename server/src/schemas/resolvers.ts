@@ -1,8 +1,8 @@
 import { AuthenticationError } from "apollo-server-express"; // Correct import for AuthenticationError
-import User from "../models/User";
-import { BookDocument } from "../models/Book"; // Ensure this import points to the correct model
-import { signToken } from "../services/auth";
-
+import models from "../models/index.js";
+import { BookDocument } from "../models/Book.js"; // Ensure this import points to the correct model
+import { signToken } from "../services/auth.js";
+const {User} = models
 interface IUserDocument {
     username: string;
     email: string;
@@ -12,7 +12,7 @@ interface IUserDocument {
 
 const resolvers = {
     Query: {
-        me: async (_: unknown, __: unknown, context: any): Promise<IUserDocument | null> => {
+        me: async (_: unknown, __: unknown, context: any): Promise<IUserDocument | null | any> => {
             if (context.user) {
                 const user = await User.findById(context.user._id).select('-__v -password');
                 return user;
@@ -22,14 +22,14 @@ const resolvers = {
     },
 
     Mutation: {
-        addUser: async (_parent: unknown, args: any): Promise<{ token: string; user: IUserDocument }> => {
+        addUser: async (_parent: unknown, args: any): Promise<{ token: string; user: IUserDocument | any}> => {
             const user = await User.create(args);
             const token = signToken(user.username, user.email, user._id);
             return { token, user };
         },
         
         // Example for login mutation, added for completeness
-        login: async (_parent: unknown, { email, password }: { email: string; password: string }): Promise<{ token: string; user: IUserDocument }> => {
+        login: async (_parent: unknown, { email, password }: { email: string; password: string }): Promise<{ token: string; user: IUserDocument | any }> => {
             const user = await User.findOne({ email });
             if (!user || !(await user.isCorrectPassword(password))) {
                 throw new AuthenticationError('Invalid credentials');

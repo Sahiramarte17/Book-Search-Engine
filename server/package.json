@@ -10,6 +10,13 @@
     "watch": "nodemon dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "nodemonConfig": {
+    "watch": [
+      "src"
+    ],
+    "ext": "ts,json,js",
+    "exec": "npx tsc && node dist/server.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
