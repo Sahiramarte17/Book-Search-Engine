@@ -22,13 +22,7 @@ const resolvers = {
     },
 
     Mutation: {
-        addUser: async (_parent: unknown, args: any): Promise<{ token: string; user: IUserDocument | any}> => {
-            const user = await User.create(args);
-            const token = signToken(user.username, user.email, user._id);
-            return { token, user };
-        },
-        
-        // Example for login mutation, added for completeness
+       // Example for login mutation, added for completeness
         login: async (_parent: unknown, { email, password }: { email: string; password: string }): Promise<{ token: string; user: IUserDocument | any }> => {
             const user = await User.findOne({ email });
             if (!user || !(await user.isCorrectPassword(password))) {

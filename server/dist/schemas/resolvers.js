@@ -13,11 +13,6 @@ const resolvers = {
         },
     },
     Mutation: {
-        addUser: async (_parent, args) => {
-            const user = await User.create(args);
-            const token = signToken(user.username, user.email, user._id);
-            return { token, user };
-        },
         // Example for login mutation, added for completeness
         login: async (_parent, { email, password }) => {
             const user = await User.findOne({ email });
