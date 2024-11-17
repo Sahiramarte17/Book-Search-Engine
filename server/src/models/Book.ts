@@ -37,6 +37,6 @@ export interface BookDocument extends Document {
   },
 });
 
-const Book = model<BookDocument>('Book', bookSchema)
+
 
 export default Book;
