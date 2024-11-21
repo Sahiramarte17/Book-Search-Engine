@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import { fileURLToPath } from 'url';
+// import { fileURLToPath } from 'url';
 import db from './config/connection.js';
 // import routes from './routes/index.js';
 import type { Request, Response } from 'express';
@@ -12,8 +12,8 @@ import { authenticateToken } from './utils/auth.js';
 import { typeDefs, resolvers } from './schemas/index.js';
 
 //get the resolved path to the file
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 const server = new ApolloServer({
   typeDefs,
@@ -39,11 +39,11 @@ const startApolloServer = async () => {
     }
   ));
   if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../client/dist')));
-    console.log(__dirname)
+    app.use(express.static(path.resolve(process.cwd(), '../client/dist')));
+    
 
     app.get('*', (_req: Request, res: Response) => {
-      res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+      res.sendFile(path.resolve(process.cwd(), '../client/dist/index.html'));
     });
   }
   app.listen(PORT, () => {
